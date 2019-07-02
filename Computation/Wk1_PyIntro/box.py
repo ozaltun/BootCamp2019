@@ -5,6 +5,10 @@ modify).
 '''
 
 from itertools import combinations
+import random
+import time
+import sys
+
 
 
 def isvalid(roll, remaining):
@@ -54,3 +58,65 @@ def parse_input(player_input, remaining):
         return choices
     except ValueError:
         return []
+
+
+
+
+def roll_dice(remaining):
+    if sum(remaining)<= 6:
+        return random.randint(1, 6)
+    else:
+        dice_1, dice_2 = random.randint(1, 6), random.randint(1, 6)
+        return dice_1+dice_2
+
+def play_round(remaining, dice_roll, time_left):
+    print('Numbers left: ', remaining)
+    print('Roll:', dice_roll)
+    print('Seconds left:', time_left)
+    player_input = input("Numbers to eliminate: ")
+    print('')
+    print('')
+    print('')
+    choices = parse_input(player_input, remaining)
+    print('')
+    print('')
+    valid_round = True
+    if not choices or (sum(choices) != dice_roll):
+        valid_round = False
+    return choices, valid_round
+
+
+start_time = time.time()
+if len(sys.argv) < 3:
+    print('Not enough arguments!!')
+
+playerName = sys.argv[1]
+timeLimit = float(sys.argv[2])
+
+remaining = [i for i in range(1, 10)]
+
+time_left = timeLimit - (time.time()-start_time)
+counter = 0
+
+while time_left >0:
+
+    dice_roll = roll_dice(remaining)
+    choices, valid_round = play_round(remaining, dice_roll, time_left)
+
+    if valid_round == False:
+        print('Your inputs were wrong, please try again.')
+    else:
+        remaining = [i for i in remaining if i not in choices]
+        counter += 1
+
+    if not remaining:
+        print('Score for player {}: '.format(playerName), counter)
+        print('Time Played: ', time.time()-start_time)
+        print('Congratulations!!, you shut the box!!')
+        break
+
+
+    time_left = timeLimit - (time.time()-start_time)
+
+if remaining:
+    print('Sorry, you weren\'t able to shut the box. You ran out of time. Please try again')
