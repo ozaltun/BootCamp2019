@@ -1,0 +1,48 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{setspace}
+\onehalfspacing
+
+\begin{document}
+
+\section{General Equilibrium}
+
+A general equailibrium is usually contrasted with partial equilibrium. Partial equailibrium would be analyzing a particular market and analyze what would happen given a change in that market (Typical demand/supply curve). A general equilibrium tries to capture the dynamics between different markets and the dynamic changes that will be seen on these markets (Markets are either complements or substitutes of each other). General equilibrium models are usually used in trade theory.
+
+
+One way to think of general equilibrium is to try and solve a social planner problem. A social planner problem is kind of like having an all extended hand that can change everything simultaneously at a certain point. Another way is to use competitive equilibrium. These days we mostly look at competitive equilibrium.
+
+
+Defnition: A competitive equilibrium is a set of allocations, $\{x_i\}_{i=1}^I$ and prices $\{p_i\}_{i=1}^I$, for each factor of production and consumable such that:
+
+\begin{itemize}
+\item households optimize utility
+\item firms optimize profits
+\item the government meets its budget constraints
+\item all factor and goods markets clear
+\end{itemize}
+
+where the households problem has (1) demands for goods and serviced and (2) supplys of factors. The firms problem  has (1) demand for factors and (2) supply of final goods and services. The government problem is usually outside the realm of consideration of macroeconomics. We usually define budget constraints and potential tax policies, but we don't try to rationalize these behaviors. We will have competitive equilibrium once all four of these bullet points are satisfied.
+
+Walras' Law states that if an economy has N markets and N-1 markets are in equilibrium, then the remaining market must also be in equilibrium.
+
+\subsection{Dynamic Stochastic General Equilibrium}
+
+There are dynamic general equilibrium models that can just be considered to be non-stochastic models (no random shocks- nothing stochastic). For DSGE models, we will usually start thinking of the model dynamics by considering the steady state equilibrium. We think of DSGE of a combination of stationary states for different points in the dynamic structure that make up a "Ergodic Set".
+
+An impulse is defined as a shock implemented on a exogenous variable such as a temporary or permanant change to tax rates. You can have static impulse functions or dynamic impulse functions depending on the state of your model. For example, think of business cycle recessions, which is usually caused by changes that come from outside of your model definition. Because it is hard to include all variables in a model of an economy, we define these random impulses to simplify our model while keeping it realistic.
+
+Think of the household's problem:
+
+$$max_{\{x_{it}, k_{t+1}\}_{t=0}^{inf}} \sum_{t=0}^{inf}\beta^t E_t[u(\{x_{it}\}_{i=1}^l)] \text{  in slides}$$
+
+constrained on some budget constraint. Similarly, we can set up the firm's problem. We can then define market clearing conditions (these are all in the slides).
+
+\end{document}
