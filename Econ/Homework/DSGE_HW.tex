@@ -1,0 +1,177 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{setspace}
+\onehalfspacing
+
+\begin{document}
+
+\section*{Exercise 1}
+
+For the Brock and Mirman model, find the value of A in the policy function. Show that your value is correct.
+
+For this case find an algebraic solution for the policy function $k_{t+1} = \Phi(k_t, z_t)$. Sources for hints are Stokey et al. (1989, exercise 2.2, p. 12) and Sargent (1987, exercise 1.1, p. 47).
+
+\subsection{Brock and Mirman's Model}
+
+Households solve the following dynamic program:
+
+$$ V(K_t, z_t) =  max_{K_{t+1}}ln(e^{z_t}K_t^{\alpha} - K_{t+1}) + \beta E_t\{V(K_{t+1}, z_{t+1})\}$$
+
+The associated Euler equaation is:
+
+$$ \frac{1}{e^{z_t}K_t^{\alpha} - K_{t+1}} =  \beta E_t\{\frac{\alpha e^{z_{t+1}}K_{t+1}^{\alpha-1}}{e^{z_{t+1}}K_{t+1}^{\alpha} - K_{t+2}}\}$$
+
+The law of motion for z is:
+
+$$z_{t+1} = \rho z_t + \epsilon_t \text{;   }\epsilon_t \approx i.i.d(0,\sigma^2)$$
+
+Verify that the policy function is of the following form:
+
+$$K_{t+1} = Ae^{z_t}K_t^{\alpha}$$
+
+In order to determine the policy function, we need to find the value of A as a function of the model's parameters. Lets expand the euler equations:
+
+$$ \frac{1}{e^{z_t}K_t^{\alpha} - K_{t+1}} =  \beta E_t\{\frac{\alpha e^{z_{t+1}}K_{t+1}^{\alpha-1}}{e^{z_{t+1}}K_{t+1}^{\alpha}*(1-A)}\}$$
+
+$$ \iff \frac{1}{e^{z_t}K_t^{\alpha} - K_{t+1}} =  \beta E_t\{\frac{\alpha K_{t+1}^{\alpha-1}}{K_{t+1}^{\alpha}*(1-A)}\}$$
+
+$$ \iff \frac{1}{e^{z_t}K_t^{\alpha} - K_{t+1}} =  \beta E_t\{\frac{\alpha}{K_{t+1}(1-A)}\}$$
+
+$$ \iff \frac{1}{e^{z_t}K_t^{\alpha} - K_{t+1}} =  \beta \frac{\alpha}{K_{t+1}(1-A)}$$
+
+$$ \iff 1 =  \beta*\alpha \frac{e^{z_t}K_t^{\alpha} - K_{t+1}}{K_{t+1}(1-A)}$$
+
+$$ \iff A=  \beta*\alpha $$
+
+\section*{Exercise 2}
+
+$$ u = a \log{\left(1 - l_{t} \right)} + \log{\left(c_{t} \right)} $$
+$$ F =  K_{t}^{\alpha} L_{t}^{1 - \alpha} e^{z} $$
+$$ du/dc =  \frac{1}{c_{t}} $$
+$$ du/dl =  - \frac{a}{1 - l_{t}} $$
+$$ E1 \text{  }
+ 0 =  T_{t} - c_{t} + k_{t} - k_{t+1} + \left(1 - \tau\right) \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+$$ E2 \text{  }
+ 0 =  \frac{\beta \left(\left(1 - \tau\right) \left(- \delta + r_{t+1}\right) + 1\right)}{c_{t+1}} - \frac{1}{c_{t}} $$
+$$ E3 \text{  }
+ 0 =  - \frac{a}{1 - l_{t}} + \frac{w_{t} \left(1 - \tau\right)}{c_{t}} $$
+$$ E4 \text{  }
+ 0 =  - \frac{\alpha k_{t}^{\alpha} l_{t}^{1 - \alpha} e^{z}}{k_{t}} + r_{t} $$
+$$ E5 \text{  }
+ 0 =  - \frac{k_{t}^{\alpha} l_{t}^{1 - \alpha} \left(1 - \alpha\right) e^{z}}{l_{t}} + w_{t} $$
+$$ E6 \text{  }
+ 0 =  T_{t} - \tau \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+
+
+\section*{Exercise 3}
+
+$$ u =  a \log{\left(1 - l_{t} \right)} + \frac{c_{t}^{1 - \gamma} - 1}{1 - \gamma} $$
+$$ F =  k_{t}^{\alpha} l_{t}^{1 - \alpha} e^{z} $$
+$$ du/dc =  \frac{c_{t}^{1 - \gamma}}{c_{t}} $$
+$$ du/dl =  - \frac{a}{1 - l_{t}} $$
+$$ E1 \text{  }
+ 0 =  T_{t} - c_{t} + k_{t} - k_{t+1} + \left(1 - \tau\right) \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+$$ E2 \text{  }
+ 0 =  \frac{\beta c_{t+1}^{1 - \gamma} \left(\left(1 - \tau\right) \left(- \delta + r_{t+1}\right) + 1\right)}{c_{t+1}} - \frac{c_{t}^{1 - \gamma}}{c_{t}} $$
+$$ E3 \text{  }
+ 0 =  - \frac{a}{1 - l_{t}} + \frac{c_{t}^{1 - \gamma} w_{t} \left(1 - \tau\right)}{c_{t}} $$
+$$ E4 \text{  }
+ 0 =  - \frac{\alpha k_{t}^{\alpha} l_{t}^{1 - \alpha} e^{z}}{k_{t}} + r_{t} $$
+$$ E5 \text{  }
+ 0 =  - \frac{k_{t}^{\alpha} l_{t}^{1 - \alpha} \left(1 - \alpha\right) e^{z}}{l_{t}} + w_{t} $$
+$$ E6 \text{  }
+ 0 =  T_{t} - \tau \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+
+\section*{Exercise 4}
+
+$$ u =  \frac{a \left(\left(1 - l_{t}\right)^{1 - \xi} - 1\right)}{1 - \xi} + \frac{c_{t}^{1 - \gamma} - 1}{1 - \gamma} $$
+$$ F =  \left(\alpha k_{t}^{\eta} + l_{t}^{\eta} \left(1 - \alpha\right)\right)^{\frac{1}{\eta}} e^{z} $$
+$$ du/dc =  \frac{c_{t}^{1 - \gamma}}{c_{t}} $$
+$$ du/dl =  \frac{a \left(1 - l_{t}\right)^{1 - \xi} \left(\xi - 1\right)}{\left(1 - \xi\right) \left(1 - l_{t}\right)} $$
+$$ E1 \text{  }
+ 0 =  T_{t} - c_{t} + k_{t} - k_{t+1} + \left(1 - \tau\right) \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+$$ E2 \text{  }
+ 0 =  \frac{\beta c_{t+1}^{1 - \gamma} \left(\left(1 - \tau\right) \left(- \delta + r_{t+1}\right) + 1\right)}{c_{t+1}} - \frac{c_{t}^{1 - \gamma}}{c_{t}} $$
+$$ E3 \text{  }
+ 0 =  \frac{a \left(1 - l_{t}\right)^{1 - \xi} \left(\xi - 1\right)}{\left(1 - \xi\right) \left(1 - l_{t}\right)} + \frac{c_{t}^{1 - \gamma} w_{t} \left(1 - \tau\right)}{c_{t}} $$
+$$ E4 \text{  }
+ 0 =  - \frac{\alpha k_{t}^{\eta} \left(\alpha k_{t}^{\eta} + l_{t}^{\eta} \left(1 - \alpha\right)\right)^{\frac{1}{\eta}} e^{z}}{k_{t} \left(\alpha k_{t}^{\eta} + l_{t}^{\eta} \left(1 - \alpha\right)\right)} + r_{t} $$
+$$ E5 \text{  }
+ 0 =  w_{t} - \frac{l_{t}^{\eta} \left(1 - \alpha\right) \left(\alpha k_{t}^{\eta} + l_{t}^{\eta} \left(1 - \alpha\right)\right)^{\frac{1}{\eta}} e^{z}}{l_{t} \left(\alpha k_{t}^{\eta} + l_{t}^{\eta} \left(1 - \alpha\right)\right)} $$
+$$ E6 \text{  }
+ 0 =  T_{t} - \tau \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+
+\section*{Exercise 5}
+$$ u =  \frac{c_{t}^{1 - \gamma} - 1}{1 - \gamma} $$
+$$ F =  k_{t}^{\alpha} \left(l_{t} e^{z}\right)^{1 - \alpha} $$
+$$ du/dc  =  \frac{c_{t}^{1 - \gamma}}{c_{t}} $$
+$$ du/dl  =  0 $$
+
+Equilibrium equations:
+$$ E1 \text{  }
+ 0 =  T_{t} - c_{t} + k_{t} - k_{t+1} + \left(1 - \tau\right) \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+$$ E2 \text{  }
+ 0 =  \frac{\beta c_{t+1}^{1 - \gamma} \left(\left(1 - \tau\right) \left(- \delta + r_{t+1}\right) + 1\right)}{c_{t+1}} - \frac{c_{t}^{1 - \gamma}}{c_{t}} $$
+$$ E3 \text{  }
+ 0 =  \frac{c_{t}^{1 - \gamma} w_{t} \left(1 - \tau\right)}{c_{t}} $$
+$$ E4 \text{  }
+ 0 =  - \frac{\alpha k_{t}^{\alpha} \left(l_{t} e^{z}\right)^{1 - \alpha}}{k_{t}} + r_{t} $$
+$$ E5 \text{  }
+ 0 =  - \frac{k_{t}^{\alpha} \left(l_{t} e^{z}\right)^{1 - \alpha} \left(1 - \alpha\right)}{l_{t}} + w_{t} $$
+$$ E6 \text{  }
+ 0 =  T_{t} - \tau \left(k_{t} \left(- \delta + r_{t}\right) + l_{t} w_{t}\right) $$
+
+Steady state equations:
+
+$$ E1 \text{  }
+ 0 =  T - c + \left(1 - \tau\right) \left(k \left(- \delta + r\right) + l w\right) $$
+$$ E2 \text{  }
+ 0 =  \frac{c^{1 - \gamma} \left(- \beta \left(\left(1 - \tau\right) \left(- \delta + r\right) + 1\right) + 1\right)}{c} $$
+$$ E3 \text{  }
+ 0 =  \frac{c^{1 - \gamma} w \left(1 - \tau\right)}{c} $$
+$$ E4 \text{  }
+ 0 =  r - \frac{K^{\alpha} \alpha \left(L e^{z}\right)^{1 - \alpha}}{K} $$
+$$ E5 \text{  }
+ 0 =  - \frac{K^{\alpha} \left(L e^{z}\right)^{1 - \alpha} \left(1 - \alpha\right)}{L} + w $$
+$$ E6 \text{  }
+ 0 =  T - \tau \left(k \left(- \delta + r\right) + l w\right) $$
+\section*{Exercise 6}
+Steady state equations:
+$$ u \text{  }
+ 0 =  \frac{a \left(\left(1 - l\right)^{1 - \xi} - 1\right)}{1 - \xi} + \frac{c^{1 - \gamma} - 1}{1 - \gamma} $$
+$$ F \text{  }
+ 0 =  K^{\alpha} \left(L e^{z}\right)^{1 - \alpha} $$
+$$ du/dc \text{  }
+ 0 =  \frac{c^{1 - \gamma}}{c} $$
+$$ du/dl \text{  }
+ 0 =  \frac{a \left(1 - l\right)^{1 - \xi} \left(\xi - 1\right)}{\left(1 - \xi\right) \left(1 - l\right)} $$
+$$ E1 \text{  }
+ 0 =  T - c + \left(1 - \tau\right) \left(k \left(- \delta + r\right) + l w\right) $$
+$$ E2 \text{  }
+ 0 =  \frac{c^{1 - \gamma} \left(- \beta \left(\left(1 - \tau\right) \left(- \delta + r\right) + 1\right) + 1\right)}{c} $$
+$$ E3 \text{  }
+ 0 =  \frac{a \left(1 - l\right)^{1 - \xi} \left(\xi - 1\right)}{\left(1 - \xi\right) \left(1 - l\right)} + \frac{c^{1 - \gamma} w \left(1 - \tau\right)}{c} $$
+$$ E4 \text{  }
+ 0 =  r - \frac{K^{\alpha} \alpha \left(L e^{z}\right)^{1 - \alpha}}{K} $$
+$$ E5 \text{  }
+ 0 =  - \frac{K^{\alpha} \left(L e^{z}\right)^{1 - \alpha} \left(1 - \alpha\right)}{L} + w $$
+$$ E6 \text{  }
+ 0 =  T - \tau \left(k \left(- \delta + r\right) + l w\right) $$
+
+
+
+\section*{Exercise 7}
+
+For the steady state of the baseline tax model in section 3.7.3 use numerican differentiation to solve for the full set of comparative statics and sign them where possible.
+∂y  ̄ ̄  ̄ ̄
+Find ∂x for y ∈ {k,l,y ̄,w ̄,r ̄,T,i,c ̄} and x ∈ {α,β,γ,δ,ξ,τ,a,z ̄}.
+Using the same parameter values as in excercise 6, solve for the numerical values of the comparative statics.
+
+\end{document}
