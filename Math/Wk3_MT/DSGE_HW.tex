@@ -1,0 +1,154 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{setspace}
+\onehalfspacing
+
+\begin{document}
+\title{Bora Ozaltun, Math Problem Set for Week 3}
+\maketitle
+
+\section*{Section 1}
+\subsection*{Exercise 1.3}
+\begin{enumerate}
+  \item G1 is neither an algebra or a sigma algebra
+  \item G2 is a algebra
+  \item G3 is a sigma algebra (and an algebra)
+\end{enumerate}
+
+
+\subsection*{Exercise 1.7}
+
+Explain why these are the ’largest’ and ’smallest’ possible $\sigma$-algebras, respectively, in the following sense: if A is any σ-algebra, then $\{\emptyset, X\} \subset \mathcal{A} \subset P(X)$.
+
+We can call $\{\emptyset, X\}$ the so called 'smallest' $\sigma$-algebra since: (1) we have to have the empty set and (2) since our $\sigma$-algebra can't be the empty set, then we need to have another element which must be $X$ itself since its complement must be in the set (which is the empty set).
+
+The other extreme can be understood with a counter example. Assume that there is a more extreme $\sigma$-algebra, then that means that it contains an element that isn't in the power set. This can't be true since every element of the $\sigma$-algebra has to be an element of X.
+
+ \subsection*{Exercise 1.10}
+Prove the following Proposition:
+Let $\{S_{\alpha}\}$ be a family of $\sigma$-algebra on X. Then 􏰛$\cap_{\alpha} S_{\alpha}$ is also a $\sigma$-algebra.
+
+We can show this by first showing that the intersection of a set of $\sigma$-algebra is a $\sigma$-algebra. if $\mathcal{A} = \cap_{\alpha} \mathcal{A}_{\alpha}$ then any element in $\mathcal{A}$ has to be in all $\mathcal{A}_{\alpha}$ (similar with the complement). Finally, any set of elements that are in the $\mathcal{A}_{\alpha}$ are also in $\mathcal{A}$. This concludes that the intersection of of a set of $\sigma$-algebra's is also a $\sigma$-algebra.
+
+\subsection*{Exercise 1.22}
+Let (X, S, μ) be a measure space. Prove the following:
+\begin{enumerate}
+  \item $\mu$ is monotone: if $A,B\in S, A \subset B$, then $\mu(A) \leq \mu(B)$
+
+  \textbf{Answer:} A measure is a non-negative additive function. That is $\mu(A \cup B) = \mu(A) + \mu(B)$ since we know that $\mu(A) \cap \mu (B) = \emptyset$. From this, we can asser that $\mu is monotone$, since all non-negative additive functions are monotone.
+
+  \item $\mu$ is countably subadditive: if $\{A_i\}_{i=1}^{\infty} \subset \mathcal{A}$, then $\mu(\cup_{i=1}^{\infty} A_i) \leq 􏰒\sum_{i=1}^{\infty} \mu(A_i)$
+
+  \textbf{Answer:} Define $E_n$ to be $E_n = \cup_{k=1}^{n}A_k$, where $A_k$ is a sequence of sets in our $\sigma$-algebra. $E_n$ will be an inscreasing sequence. We can now write the following from the definition of a measure:
+
+  $$\mu(\cup_{k=1}^{\infty}) = lim_{n->\infty} \mu(E_n)$$
+
+  Further analyzing this:
+
+  $$\mu(\cup_{k=1}^{\infty}) = lim_{n->\infty} \mu(\cup_{k=1}^{n}A_k)$$
+  $$\mu(\cup_{k=1}^{\infty}) \leq lim_{n->\infty} \sum_{k=1}^{n} \mu(A_k)$$
+  $$\mu(\cup_{k=1}^{\infty}) \leq \sum_{k=1}^{\infty} \mu(A_k)$$
+
+\end{enumerate}
+
+\subsection*{Exercise 1.23} Let $(X, S, \mu)$ be a measure space. Let $B \in S$. Show that $\lambda : S -> [0,\infty]$ defined by $\lambda(A)=\mu(A\cup B)$ is also a measure $(X, S)$
+
+This is a bit trivial in the sense that the intersection of A and B will satisfy all the properties of a measure.  % TODO
+
+
+\subsection*{Exercise 1.26} Prove (ii). A consequence of this continuity property leads to the Borel-Cantelli Lemma, an
+extremely handy tool in probability theory.
+
+If we look at at part (i) and take the complement of A, we will get the same problem as part (ii). Since we know that part (i) is ture, part (ii) must be true as well. We can say this since the complement of any element within a $\sigma$-space is in the $\sigma$ space as well.
+
+\section*{Section 2}
+
+\subsection*{Exercise 2.10}
+
+We can replace (*) with the given result since:
+
+$$\mu^*(B) \leq \mu^*(B\capE) + \mu^*(B\cap E^c)$$ % TODO
+
+The rest of the detailed proof is given in the notes.
+
+
+\subsection*{Exercise 2.14}
+Why is it true that the Borel-algebra $\mathcal{B}(R)$ is a subset of $\mathcal{M}$?
+
+We can observe that the space of all lebesgue measureable sets contains the open set. The borel sets are the intersection of all such sets. So it follows that the borel sets must be a subset of lebesgue sets.
+
+\section*{Section 3}
+
+\subsection*{Exercise 3.1}
+Prove that every countable subset of the real line has Lebesgue measure 0.
+
+Define $A$ to be the countable subset of R. We know that every point has a measure of zero. Now choose a compact neighborhood around x. A countable subset of R means that it is a countable union of points, which will have a measure of 0 -- since it is the sum of 0 measures.
+
+\subsection*{Exercise 3.7}
+
+Explain why the set (*) could be replaced by any of the following:
+
+$$\{ x \in X : f(x) \leq a\}$$
+$$\{ x \in X : f(x) > a\}$$
+$$\{ x \in X : f(x) \geq a\}$$
+
+What is the $\sigma$-algebra on R that we are explicitly using here?
+
+We can simplify this result to only having to prove the second statement since the lebesgue measure of any given point is zero. We can prove the second statement by looking at the complement of the statement, which from the definition of a sigma-algebra will be measureable also.
+
+
+\subsection*{Exercise 3.17}
+Prove that for any $f : X -> R$: if f is bounded, the convergence in:
+\begin{enumerate}
+  \item There exists an $\{s_n\}$ sth $s_n -> f$ pointwise, i.e. for any $x\in X, lim_{n->\infty}s_n(x) = f(x)$
+\end{enumerate}
+is uniform.
+
+Since we know that (from the proof of (1)):
+
+$$| f - s_n| \leq 2^{-n}$$
+
+If we know that  f is bounded by M above, then for $n\geq M$:
+
+$$sup|f -s_n| \leq 2^{-n}$$
+
+and thus, f is uniformly convergent.
+
+\section*{ Section 4}
+
+\subsection*{Exercise 4.13}
+If f is measurable, $|f| < M$ on $E \in M$ and $\mu(E) <\infty$, then $f \in \mathcal{L}^1 (\mu, E)$.
+
+If $|f| < M$, then by Remark 4.10 combined with $\mu(E) < \infty$, we can say that f is absolutely integrable since $f^+$ and $f^-$ have finite integragles over E.
+
+
+\subsection*{Exercise 4.14}
+If $f \in \mathcal{L}^1 (\mu, E)$ then f is finite almost everywhere on E.
+
+Lets define some arbitrary $k> 0$, such that:
+$$\mu(\{f > k\}) = \int_{f>k} d \mu$$
+We can futher write that:
+$$\int_{f>k} d \mu \leq 1/m \int_{f>m} f d\mu \leq 1/m \int_E f d\mu$$
+If we take m to go to $\infty$, we can observe that it is almost finite everywhere on E.
+
+\subsection*{Exercise 4.15}
+If $f, g \in \mathcal{L}^1 (\mu, E), f \leq g$ on $E \Rightarrow  \int_E f d \mu \leq \int_E g d\mu$
+
+Without loss of generality, lets consider the absolute functions $
+|f|$ and $|g|$. Now we have that $|f|,|g| > 0$, so the result holds as  a direct result of proposition 4.7.
+
+
+\subsection*{Exercise 4.16}
+If $f \in \mathcal{L}^1 (\mu, E), A \in M, A\subset E \Rightarrow f \in \mathcal{L}^1 (\mu, A)$
+
+If $f \in \mathcal{L}^1 (\mu, E)$, then $A\subset E$ will have a less or equal supremum to that of E. Thus $f\in\mathcal{L}^1 (\mu, A)$. Or more formally:
+$$\int_A |f| d \mu  = sup\{\int_A s d \mu: 0 \leq s \leq f\} \leq sup\{\int_E s d \mu: 0 \leq s \leq f\} $$
+\end{document}

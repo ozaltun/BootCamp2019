@@ -1,0 +1,24 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{setspace}
+\onehalfspacing
+
+\begin{document}
+
+\section*{Exercise 1}
+
+$$x(u) = x(u_0) + x_u(u_0)(u - u_0) + (1/2)x_{uu}(u_0)(u - u_0)^2 + (1/6) x_{uuu}(u_0)(u-u_0)^3$$
+
+where we can derive $x_u, x_{uu}, x_{uuu}$ to be:
+
+$$x_u (u) = -\frac{F_u}{F_x}$$
+$$x_{uu} (u) = -\frac{F_{xx}(x_u)^2 +2*F_{xu}*x_u +F_{uu}}{F_x}$$
+$$x_{uuu} (u) = -\frac{F_{xxx}(x_u)^3+3(F_{xxu}*(x_u)^2 + F_{xuu}*(x_u) + F_{xu}*(x_{uu}) + F_{xx}*(x_{uu}*x_u)) +F_{uuu} }{F_x}$$
+\end{document}
