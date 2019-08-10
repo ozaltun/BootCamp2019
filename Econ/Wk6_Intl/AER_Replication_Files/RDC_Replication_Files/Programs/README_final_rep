@@ -1,0 +1,361 @@
+EXTERNAL README FOR CENSUS DISCLOSED PROGRAMS
+Last edited 3/10/2016
+
+================================================================
+----------------------------------------------------------------
+FOLDER STRUCTURE DESCRIPTION:
+----------------------------------------------------------------
+================================================================
+The root project folder has the following sub folders:
+(with global $ attached to hide the path name)
+
+ 	$programs
+this is where programs are located, including bash file to run all
+	$data
+this is where data gets written to, called
+	$temp
+this is where temp data gets written to
+	$output
+this is where tables, results, etc get saved
+	$bs
+this is where files for structural estimation get saved
+	$matlab
+matlab programs for structural estimation
+	$external_data
+this is where you store data external to the census 
+it is important to have all the datasets we require; otherwise, program sequence will not run correctly
+
+Note on pathnames: these have been removed in program files to satisfy disclosure requirements.
+
+In each folder please find a comment next to each redacted pathname to inform you of the kind of folder we were referring to.
+If there is no comment, the folder name should be marked by the global beginning $folder, in which case we refer to the
+list above.
+
+
+================================================================
+----------------------------------------------------------------
+PROGRAM FILES DESCRIPTION:
+----------------------------------------------------------------
+================================================================
+
+This file describes all the programs called by script_moo_rep.bash and the data that is cited and created. 
+
+================================================================
+0. script_moo_rep.bash
+================================================================
+This is the bash script to run all programs at once. To active this you need to set up directories in the same structure as given above.
+
+
+================================================================
+1. PROGRAMS TO GRAB TRADE DATA
+================================================================
+requires:
+LFTTD, IMP, EC, LBD, SSEL
+----------------------------------------------------------------
+
+----------------------------------------------------------------
+import01_makebridge_full.sas 
+--------------------------------------
+Creates a EIN-FIRMID bridge directly using all source data, from 1992-2007
+Reads in all EC data for each EC year
+Drops tabbed ='N' (used to drop active=N also, but this has changed)
+Checks for CFN duplicates and removes duplicates in a systematic way
+Reads in all LBD data in each year, merge with Census in EC years, select best FIRMID
+Also bring in SSEL data each year, to get EIN data for non EC years.
+
+Output: bridge files between EIN and firmid, per census year
+
+----------------------------------------------------------------
+import02_fetchimports.sas 
+--------------------------------------
+brings in imp data from imp database with EIN info, 
+attach firmids to imp data using the sas EIN-firmid bridge made in import01, 
+aggregate to firm hs country level, and export to stata.
+
+Output: imports&y..dta datasets, firm*HS import data
+
+----------------------------------------------------------------
+SAS_01_Make_exports.sas 
+--------------------------------------
+Uses LFTTD export data (monthly) and makes the firm export database, using inherent lfttd firmids as well as firmids from the sas EIN-FIRMID bridge (created by import01)
+Does this JUST FOR 2007.
+
+Ouput: exports_tf_match.dta, firm*HS export data
+
+================================================================
+2. PROGRAMS TO CONSTRUCT FIRM DATASETS 
+================================================================
+
+----------------------------------------------------------------
+SAS_02_Make_Census_data.sas 
+--------------------------------------
+Pulls data from all 8 ECs to build establishment dataset
+
+Output: estabs_sales`year'.dta
+
+
+----------------------------------------------------------------
+SAS_04_Make_naics_bridge.sas
+--------------------------------------
+creates a cmf dataset with naics labels (07,02,fk) using the same steps as SAS_02, to be used in IDPS_x_00for deflating imports (convert imports from hs07 to naics07 then to naics97 then apply nber deflators)
+
+output: naics_bridge.dta
+
+
+----------------------------------------------------------------
+IDPS_pull_cmf_new.sas
+--------------------------------------
+A short script to pull cmf1997 and cmf2007 in order to find sales and exports by industry, 
+dropping establishments with negative sales - exports
+used in next stata file, IDPS_x_00, to find import penetration
+
+Output: cmf`year'.dta 
+
+
+----------------------------------------------------------------
+IDPS_x_00_prep_new.do
+--------------------------------------
+Prepares all the datasets to be used in interdependencies regressions
+
+makes naics dictionaries for naics97 and naicsx97 (just unique lists)
+select appropriate shock (shock_oc (oc=only china), labelled shock3) from input and output shock datasets
+create 97, 07 import penetration measures using inhouse EC data (since NBER-CES yields negative problem)
+this is done at the level of naicsX
+
+grab industry deflators from nber-ces, for both naics and naics_baseroot: note: deflators_pstrade is not a naicsX deflator set, because it is used to deflate imports converted to the naics6(w/ baseroot) format, in Stata_01
+
+creates a m:m joinby mapping between naics07 manufacturing and fknaics02 (=1997) manufacturing,
+which will be used in Stata_01 for deflating
+
+Output Datasets:
+naics_97.dta
+china_shock_1997.dta
+china_shock_2007.dta
+china_input_shock_1997.dta
+china_input_shock_2007.dta
+china_imppen_1997.dta
+china_imppen_2007.dta
+
+----------------------------------------------------------------
+Stata_00_Prepare_country_data.do
+--------------------------------------
+Takes the external country level dataset and prepares a cleaned version of that
+for stata_02 structural estimation.
+Also prepares country_names dataset for use in Stata_07
+
+Output: country_clean.dta, country_names.dta
+
+----------------------------------------------------------------
+Stata_01_Make_firm_datasets.do
+--------------------------------------
+This program is a key program.
+It pulls in the estab data and aggregates to the firm level, 
+output is a widely used firm-level dataset
+
+To the establishment data,
+It adds in firm imports
+It creates firm types
+It assesses different share variables
+It makes a firm dataset with firm type for use in limiting imports as appropriate for calculating facts
+It makes a table of the firm types
+It makes a version with deflated sales, inputs, imports, etc
+
+Generates total inputs variable
+VA,CM available for ccn, cmf, cmi
+MERCH available for cwh
+WW available for CMF
+
+Deflate sales: sales* ipt
+
+input_mats = cm (by plant - for CCN, CMI, CMF)
+input_whole = merch (for CWH)
+tot_inputs = input_mats + input_whole + ww
+domestic = tot_inputs - imports
+
+flag_neg_dom=1 if domestic<0
+
+Output: Appendix_Table.txt (appendix sample table), 
+
+================================================================
+3. PROGRAMS FOR INTERDEPENDENCIES REGRESSIONS
+================================================================
+
+----------------------------------------------------------------
+IDPS_x_02_makeshares.do
+--------------------------------------
+Uses the firm_industry dataset prepared by Stata_01 (note undeflated), and starts creating IDPS panel
+For 1997, and 2007, make employment and sales shares by firm industry for each firm
+uses fk_naics02 codes (same as naics97 for manuf)
+does this by both naics_x (output side) and naics_b (for input side)
+
+Output: firmid_shares_(type)_(year).dta, firmid_shares_(type)_(year)_(naics).dta (unique firm naics identifier for merging in later)
+
+----------------------------------------------------------------
+IDPS_x_03_makeshock.do
+--------------------------------------
+Makes sourcing and import competition shocks based on weighting firm shares from IDPS_x_02 and industry shocks 
+On the input/output shocks:
+	foreach share_emp share_sal share3_emp share3_sal naics3_sal naics3_emp:
+	_in means input industry, nothing means output industry
+	suffix fixshock3 (1997 sales shares - conducted only on the 1997 sample), shock3 (conducted for 	each year using shares from each year)
+On the import pentration shocks:
+	foreach share3_sal share_sal naics3_sal:
+	suffix fix (1997 shares), nothing (current year shares)
+	one set based on US/EU imppen fixing denominator to 1997 total imports (imppenus, imppeneu)
+	one set based on US imppen with current year denominator total imports (imppen)
+Combining input and output and imppen shocks yields:
+
+Output: "firmid_all_shocks.dta"
+
+Note: IDPS02 and 03 do not need to have the inflation procedure since we only ever use fixshocks! 
+
+----------------------------------------------------------------
+IDPS_x_05_makepanel.do
+--------------------------------------
+combines firmid shock data (firmid_all_shocks) with firmid_data_year made by Stata_01
+
+Output: firmid_reg_panel.dta
+unbalanced, leaving differencing and balancing to _06
+
+
+----------------------------------------------------------------
+IDPS_x_06_diffpanel_new.do
+--------------------------------------
+Creates both deflated and undeflated datasets differenced over 07-97 
+Output: diff_for_reg_firm`firmtype'_clean`deftype'.dta
+
+
+----------------------------------------------------------------
+IDPS_x_08_regress_final.do
+--------------------------------------
+Creates the one version of regressions (dhs china imports, deflated) for disclosure.
+
+Output regression table: $output/IDPS_Tables...FINAL.txt
+
+
+
+
+================================================================
+4. PROGRAMS TO CREATE FIGURES, CHARTS, STRUCTURAL 
+================================================================
+----------------------------------------------------------------
+Stata_02_Structural_estimation_input_v2.do 
+Stata_20_Table1_stats
+--------------------------------------
+Creates inputs for structural estimation (folder $bs)
+
+----------------------------------------------------------------
+Stata_03 Premia Figures...
+	parta.do
+	partb.do
+	partc.do
+--------------------------------------
+parta:
+creates premia_figs.dta, a dataset for 2007 firm import destination and product information
+
+partb:
+*** NOTE: partb needs to be run interactively using xstata, not in batch
+does a firm exporting product and importing product count, joins this to firm industry controls, and to 2002 firm data
+generates robustness version of Figure C.2. which somehow starts at min num = 3 (do not include non-importers)
+	Premia07_exports_rb, imports_rb
+makes the baseline figure (Figure 1), and the 2002 robustness figure (Figure C.1)
+	Premia07, Premia02
+makes the version of baseline (Figure C.2) with product count controls, separately for importing controls and exporting controls
+	Premia07_imports, exports
+
+partc: 
+Creates Appendix Table C2, premia regressions
+
+
+----------------------------------------------------------------
+Stata_04 Country_product_stats.do
+--------------------------------------
+Makes Table 2 in manuscript: Products Per Country, Countries Per Product
+collects data on firm imports and firm info, limited to sample firm that are importers
+
+Output log file:
+	$output/Firm_Import_Stats.txt
+
+----------------------------------------------------------------
+Stata_05 Country_product_stats_HS6_imports.do
+Stata_06 Country_product_stats_HS6_exports.do
+--------------------------------------
+Makes a different version of the above when products = HS6 
+for both imports and exports
+
+Output log files::
+	$output/Firm_Import_Stats_HS6.txt
+	$output/Firm_Export_Stats_HS6.txt
+
+
+----------------------------------------------------------------
+Stata_07 Hierarchy_table.do
+--------------------------------------
+Makes the Pecking Order Tables
+
+Output: 
+	$output/Hierarchy
+	$output/Random_Numbers.xls
+	$data/country_list_table.dta, $data/country_rank.dta are identical versions of Table 1 (made by Stata_02)
+
+
+----------------------------------------------------------------
+Stata_08_Counterfactual_Predictions_Tables_v3.do
+--------------------------------------
+This program makes a table from the data to match our predictions table in the counterfactual analysis
+
+Output: $output/predictions_table.csv
+
+----------------------------------------------------------------
+Stata_09_Counterfactual_1997_stats.do
+--------------------------------------
+This program calculates stats for the 1997 data for our negative 
+counterfactual shock (an input for structural estimation)
+
+
+----------------------------------------------------------------
+Stata_10_Potential_Estimates_Robustness.do
+--------------------------------------
+This program makes all the requisite inputs for the structural estimation.
+    These inputs include:
+       1. Domestic input use for all firms
+       2. Total imports by country
+       3. Input shares by country for all firms
+       4. Country sourcing potential estimates based on importing firms
+       5. Estimate of theta
+       6. Dispersion measures   
+
+----------------------------------------------------------------
+Stata_19_Gravity_Decomp.do
+--------------------------------------
+This program does a gravity decomposition of aggregate imports
+
+Output: Gravity_Decomp.txt
+
+
+----------------------------------------------------------------
+Stata_20_Table1_stats.do
+--------------------------------------
+This program computes additional stats for table 1.
+
+
+================================================================
+5. ADDITIONAL MOMENTS: Exporter moments
+================================================================
+
+----------------------------------------------------------------
+Export_01_estabs.sas
+--------------------------------------
+links trailer files to each one of the censuses, to find exporting identifier
+
+----------------------------------------------------------------
+Export_02_moment.sas
+--------------------------------------
+links to lfttd, to create separate exporting identifier
+
+----------------------------------------------------------------
+Export_03_make_moment_final.do
+--------------------------------------
+Final firm exporting identifier is whether the firm exports in at least one of the LFTTD or EC trailers
+
+Outputs moments to $output/moments_final.txt
